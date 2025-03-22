@@ -1,7 +1,7 @@
 {
   "name": "task-app",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js"
@@ -12,9 +12,12 @@
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "mongodb": "^6.15.0",
+    "mongoose": "^8.12.2"
   },
   "devDependencies": {
+    "dotenv": "^16.4.7",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.9"
   }
