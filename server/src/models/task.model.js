@@ -5,20 +5,21 @@
 // 4. modify task
 // 5. delete task
 
-const tasks = require("./tasks.mongo");
+const task = require("./task.mongo");
 
 class TaskModel {
   async createTask(task) {
     try {
-      await tasks.updateOne(
+      await task.create(
         {
           title: task.title,
         },
         {
-          $set: task,
-        },
-        {
-          upsert: true,
+          title: task.title,
+          description: task.description,
+          user: task.user,
+          dueDate: task.dueDate,
+          status: task.status,
         }
       );
     } catch (err) {

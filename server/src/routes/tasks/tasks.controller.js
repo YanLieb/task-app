@@ -3,33 +3,41 @@
 // 3. check and update task from front in back
 // 4. check and delete task from front in back
 const { format } = require("morgan");
-const TaskModel = require("../../models/tasks.model");
+const TaskModel = require("../../models/task.model");
 
 class TaskController {
   constructor() {
     this.taskModel = new TaskModel();
   }
 
-  formatTaskDueDate = (dueDate, res) => {
-    console.log(dueDate);
-    const date = new Date(dueDate);
-    console.log(date);
-    if (isNaN(date)) {
+  formatDate = (date, res) => {
+    const formattedDate = new Date(date);
+
+    if (isNaN(formattedDate)) {
       return res.status(400).json({
         error: "Invalid due date",
       });
     }
 
-    return date;
+    return formattedDate;
   };
 
   httpAddNewTask = async (req, res) => {
-    const task = req.body;
+    try {
+      const task = req.body;
 
-    task.dueDate = this.formatTaskDueDate(task.dueDate, res);
+      task.dueDate = this.formatDate(task.dueDate, res);
 
-    await this.taskModel.createTask(task);
-    return res.status(201).json(task);
+      await this.taskModel.createTask(task);
+      return res.status(201).json(task);
+    } catch (err) {
+      if (err.name === "ValidationError") {
+        const errors = Object.values(err.errors).map((e) => e.message);
+        return res.status(400).json({ errors });
+      }
+      console.error(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
   };
 
   httpGetAllTasks = () => {
