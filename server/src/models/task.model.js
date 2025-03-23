@@ -21,16 +21,18 @@ class TaskModel {
     }
   }
 
-  async findTask(filter) {
-    return await Task.findOne(filter);
-  }
-
   async updateTask(filter, updates) {
-    const task = await this.findTask(filter);
-    if (!task) return null;
+    try {
+      const task = await Task.findOne(filter);
+      if (!task)
+        throw new Error("No existing task found", { cause: "TaskNotFound" });
 
-    Object.assign(task, updates);
-    return await task.save();
+      Object.assign(task, updates);
+      return await task.save();
+    } catch (err) {
+      console.error(`Could not update task : ${err.message}`);
+      throw err;
+    }
   }
 
   async getAllTasks() {

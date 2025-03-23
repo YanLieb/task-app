@@ -2,7 +2,7 @@
 // 2. check and display task from back
 // 3. check and update task from front in back
 // 4. check and delete task from front in back
-const { format } = require("morgan");
+
 const TaskModel = require("../../models/task.model");
 
 class TaskController {
@@ -12,7 +12,6 @@ class TaskController {
 
   formatDate = (date, res) => {
     const formattedDate = new Date(date);
-
     if (isNaN(formattedDate)) {
       return res.status(400).json({
         error: "Invalid due date",
@@ -28,7 +27,9 @@ class TaskController {
 
       if (!task.title) throw new Error("Title missing");
 
-      task.dueDate ? this.formatDate(task.dueDate, res) : undefined;
+      task.dueDate = task.dueDate
+        ? this.formatDate(task.dueDate, res)
+        : undefined;
 
       await this.taskModel.createTask(task);
 
@@ -43,7 +44,33 @@ class TaskController {
     }
   };
 
-  httpUpdateTask = async (req, res) => {};
+  httpUpdateTask = async (req, res) => {
+    try {
+      const update = req.body;
+
+      if (!update.title) throw new Error("Title missing");
+
+      const filter = { _id: req.params.id };
+
+      update.dueDate = update.dueDate
+        ? this.formatDate(update.dueDate, res)
+        : undefined;
+
+      const updatedTask = await this.taskModel.updateTask(filter, update);
+
+      res.status(200).json(updatedTask);
+    } catch (err) {
+      if (err.name === "ValidationError") {
+        const errors = Object.values(err.errors).map((e) => e.message);
+        return res.status(400).json({ errors });
+      }
+      if (err.cause === "TaskNotFound") {
+        return res.status(404).json({ error: "Task not found" });
+      }
+      console.error(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  };
 
   httpGetAllTasks = () => {
     console.log("all tasks");
