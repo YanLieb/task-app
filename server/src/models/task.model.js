@@ -25,7 +25,7 @@ class TaskModel {
     try {
       const task = await Task.findOne(filter);
       if (!task)
-        throw new Error("No existing task found", { cause: "TaskNotFound" });
+        throw new Error("No existing task found", { cause: "NotFound" });
 
       Object.assign(task, updates);
       return await task.save();
@@ -36,7 +36,15 @@ class TaskModel {
   }
 
   async getAllTasks() {
-    return await Task.find();
+    try {
+      const tasks = await Task.find();
+      if (tasks.length === 0)
+        throw new Error("No tasks yet", { cause: "NotFound" });
+      return tasks;
+    } catch (err) {
+      console.error(err.message);
+      throw err;
+    }
   }
 }
 

@@ -64,7 +64,7 @@ class TaskController {
         const errors = Object.values(err.errors).map((e) => e.message);
         return res.status(400).json({ errors });
       }
-      if (err.cause === "TaskNotFound") {
+      if (err.cause === "NotFound") {
         return res.status(404).json({ error: "Task not found" });
       }
       console.error(err);
@@ -72,8 +72,18 @@ class TaskController {
     }
   };
 
-  httpGetAllTasks = () => {
-    console.log("all tasks");
+  httpGetAllTasks = async (req, res) => {
+    try {
+      const tasks = await this.taskModel.getAllTasks();
+
+      return res.status(200).json({ tasks: tasks });
+    } catch (err) {
+      if (err.cause === "NotFound") {
+        return res.status(404).json({ error: "No tasks yet" });
+      }
+      console.error(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
   };
 }
 
