@@ -5,26 +5,36 @@
 // 4. modify task
 // 5. delete task
 
-const task = require("./task.mongo");
+const Task = require("./task.mongo");
 
 class TaskModel {
-  async createTask(task) {
+  async createTask(data) {
     try {
-      await task.create(
-        {
-          title: task.title,
-        },
-        {
-          title: task.title,
-          description: task.description,
-          user: task.user,
-          dueDate: task.dueDate,
-          status: task.status,
-        }
-      );
+      const task = new Task(data);
+
+      console.log(task);
+
+      return await task.save();
     } catch (err) {
-      console.error(`Could not save task : ${err}`);
+      console.error(`Could not save task : ${err.message}`);
+      throw err;
     }
+  }
+
+  async findTask(filter) {
+    return await Task.findOne(filter);
+  }
+
+  async updateTask(filter, updates) {
+    const task = await this.findTask(filter);
+    if (!task) return null;
+
+    Object.assign(task, updates);
+    return await task.save();
+  }
+
+  async getAllTasks() {
+    return await Task.find();
   }
 }
 

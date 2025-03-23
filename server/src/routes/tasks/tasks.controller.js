@@ -26,9 +26,12 @@ class TaskController {
     try {
       const task = req.body;
 
-      task.dueDate = this.formatDate(task.dueDate, res);
+      if (!task.title) throw new Error("Title missing");
+
+      task.dueDate ? this.formatDate(task.dueDate, res) : undefined;
 
       await this.taskModel.createTask(task);
+
       return res.status(201).json(task);
     } catch (err) {
       if (err.name === "ValidationError") {
@@ -39,6 +42,8 @@ class TaskController {
       return res.status(500).json({ error: "Internal server error" });
     }
   };
+
+  httpUpdateTask = async (req, res) => {};
 
   httpGetAllTasks = () => {
     console.log("all tasks");
