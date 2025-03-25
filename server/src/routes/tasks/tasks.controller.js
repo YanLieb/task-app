@@ -1,13 +1,9 @@
-// 1. check and send task coming from front
-// 2. check and display task from back
-// 3. check and update task from front in back
-// 4. check and delete task from front in back
-
 const TaskModel = require("../../models/task.model");
 
 class TaskController {
   formatDate(date, res) {
     const formattedDate = new Date(date);
+    
     if (isNaN(formattedDate)) {
       return res.status(400).json({
         error: "Invalid due date",
@@ -46,7 +42,7 @@ class TaskController {
 
       const update = req.body;
       if (!update.title) throw new Error("Title missing");
-
+      
       update.dueDate = update.dueDate
         ? this.formatDate(update.dueDate, res)
         : undefined;
