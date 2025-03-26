@@ -1,9 +1,16 @@
 const TaskModel = require("../../models/task.model");
 
 class TaskController {
+  constructor() {
+    this.formatDate = this.formatDate.bind(this);
+    this.httpAddNewTask = this.httpAddNewTask.bind(this);
+    this.httpUpdateTask = this.httpUpdateTask.bind(this);
+  }
+
   formatDate(date, res) {
+    console.log(date);
     const formattedDate = new Date(date);
-    
+
     if (isNaN(formattedDate)) {
       return res.status(400).json({
         error: "Invalid due date",
@@ -13,7 +20,7 @@ class TaskController {
     return formattedDate;
   }
 
-  httpAddNewTask = async (req, res) => {
+  async httpAddNewTask(req, res) {
     try {
       const task = req.body;
 
@@ -32,9 +39,11 @@ class TaskController {
         return res.status(400).json({ errors });
       }
       console.error(err);
-      return res.status(500).json({ error: "Internal server error" });
+      return res
+        .status(500)
+        .json({ error: "Internal server error - " + err.message });
     }
-  };
+  }
 
   async httpUpdateTask(req, res) {
     try {
@@ -42,9 +51,9 @@ class TaskController {
 
       const update = req.body;
       if (!update.title) throw new Error("Title missing");
-      
+
       update.dueDate = update.dueDate
-        ? this.formatDate(update.dueDate, res)
+        ? this.formatDate(update.dueDate)
         : undefined;
 
       const updatedTask = await TaskModel.updateTask(filter, update);
@@ -59,7 +68,9 @@ class TaskController {
         return res.status(404).json({ error: "Task not found" });
       }
       console.error(err);
-      return res.status(500).json({ error: "Internal server error" });
+      return res
+        .status(500)
+        .json({ error: "Internal server error - " + err.message });
     }
   }
 
@@ -87,7 +98,9 @@ class TaskController {
       }
 
       console.error(err);
-      return res.status(500).json({ error: "Internal server error" });
+      return res
+        .status(500)
+        .json({ error: "Internal server error - " + err.message });
     }
   }
 
@@ -104,7 +117,9 @@ class TaskController {
         return res.status(404).json({ error: err.message });
       }
       console.error(err);
-      return res.status(500).json({ error: "Internal server error" });
+      return res
+        .status(500)
+        .json({ error: "Internal server error - " + err.message });
     }
   }
 }

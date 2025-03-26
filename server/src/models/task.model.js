@@ -5,8 +5,6 @@ class TaskModel {
     try {
       const task = new Task(data);
 
-      console.log(task);
-
       return await task.save();
     } catch (err) {
       console.error(`Could not save task : ${err.message}`);
@@ -22,7 +20,7 @@ class TaskModel {
 
   static async updateTask(filter, updates) {
     try {
-      const task = this.getTask(filter);
+      const task = await this.getTask(filter);
       Object.assign(task, updates);
       return await task.save();
     } catch (err) {
