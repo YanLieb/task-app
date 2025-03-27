@@ -15,6 +15,7 @@ async function httpGetTasks() {
 
 async function httpAddTask(task) {
   try {
+    console.log(task);
     return await fetch(`${API_URL}/tasks`, {
       method: "POST",
       headers: {
