@@ -1,18 +1,16 @@
-import TaskEntry from "./TaskEntry";
+import Task from "./Task.jsx";
 
-export default function Tasklist({ tasks }) {
-  return (
-    <>
-      <h1>Liste de tâches</h1>
-      <ul>
-        {tasks.map((task) => {
-          return (
-            <li key={task._id}>
-              <TaskEntry task={task} />
-            </li>
-          );
-        })}
-      </ul>
-    </>
-  );
+export default function Tasklist({tasks}) {
+	return (
+		 <>
+			 <h1>Liste de tâches</h1>
+			 <div className="task-list">
+				 {tasks.map((task) => {
+					 return (
+							<Task key={task._id} task={task}/>
+					 );
+				 })}
+			 </div>
+		 </>
+	);
 }
