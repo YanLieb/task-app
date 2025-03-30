@@ -15,7 +15,6 @@ async function httpGetTasks() {
 
 async function httpAddTask(task) {
   try {
-    console.log(task);
     return await fetch(`${API_URL}/tasks`, {
       method: "POST",
       headers: {
@@ -26,10 +25,46 @@ async function httpAddTask(task) {
   } catch (err) {
     console.error(err.message);
     return {
-      error: "Could not add task" + err.message,
+      error: "Could not add task : " + err.message,
       ok: false,
     };
   }
 }
 
-export { httpAddTask, httpGetTasks };
+async function httpUpdateTask(task) {
+  try {
+    return await fetch(`${API_URL}/tasks/${task.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(task),
+    });
+  } catch (err) {
+    console.error(err.message);
+    return {
+      error: "Could not update task : " + err.message,
+      ok: false,
+    };
+  }
+}
+
+async function httpDeleteTask(taskId) {
+  try {
+    return await fetch(`${API_URL}/tasks/${taskId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: taskId }),
+    });
+  } catch (err) {
+    console.error(err.message);
+    return {
+      error: "Could not delete task : " + err.message,
+      ok: false,
+    };
+  }
+}
+
+export { httpAddTask, httpGetTasks, httpUpdateTask, httpDeleteTask };

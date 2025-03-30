@@ -1,0 +1,54 @@
+html {
+  font-size: 16px;
+  font-family: "Ubuntu Sans", sans-serif;
+  color: #012326;
+}
+
+body {
+  background-color: #f2f8ff;
+}
+
+.task__update {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
+}
+
+button,
+input[type="button"] {
+  all: unset;
+  width: fit-content;
+  cursor: pointer;
+  padding: 0.5em 1.5em;
+  border: 2px solid #066b85;
+  background-color: #066b85;
+  color: #f2f8ff;
+  transition: ease-in-out 200ms 100ms;
+}
+
+input[type="button"] {
+  border: 2px solid #62bdf3;
+  background-color: #62bdf3;
+  color: #012326;
+}
+
+button:hover {
+  background-color: #f2f8ff;
+  color: #066b85;
+  box-shadow: 5px 5px 0 #066b85;
+}
+
+input[type="button"]:hover {
+  box-shadow: 5px 5px 0 #012326;
+}
+
+input[type="button"].task__update-delete {
+  background-color: tomato;
+  border-color: tomato;
+}
+
+input[type="button"].task__update-delete:hover {
+  background-color: #f2f8ff;
+  color: tomato;
+  box-shadow: 5px 5px 0 tomato;
+}

@@ -1,0 +1,28 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  margin-bottom: 1em;
+}
+.form-group.task__data-status,
+.form-group.task__data-dueDate {
+  align-items: flex-start;
+}
+
+.form-group.task__submit button {
+  margin-left: auto;
+}
+
+input[type="text"],
+textarea {
+  padding: 1em;
+}
+
+select,
+input[type="datetime-local"] {
+  padding: 0.5em;
+}
+
+textarea {
+  resize: vertical;
+}

@@ -1,0 +1,29 @@
+p {
+  margin: 0;
+}
+
+.task {
+  border: 1px solid #012326;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+.task__data {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.task__data.task__data-description {
+  flex-direction: column;
+}
+
+.task__title {
+  font-size: 0.9em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 0.6px;
+  font-weight: 600;
+}

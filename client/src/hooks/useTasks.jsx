@@ -1,13 +1,22 @@
 import { useState, useEffect, useCallback } from "react";
 
-import { httpGetTasks, httpAddTask } from "./requests";
+import {
+  httpGetTasks,
+  httpAddTask,
+  httpUpdateTask,
+  httpDeleteTask,
+} from "./requests";
 
 export default function useTasks() {
   const [tasks, setTasks] = useState([]);
 
   const getTasks = useCallback(async () => {
-    const fetched = await httpGetTasks();
-    setTasks(fetched.tasks);
+    try {
+      const fetched = await httpGetTasks();
+      setTasks(fetched.tasks);
+    } catch (err) {
+      console.warning(err.message);
+    }
   }, []);
 
   useEffect(() => {
@@ -19,18 +28,51 @@ export default function useTasks() {
       e.preventDefault();
       const data = new FormData(e.target);
       const title = data.get("task_title");
-      const dueDate = new Date(data.get("task_dusDate"));
+      const dueDate = new Date(data.get("task_dueDate"));
       const status = data.get("task_status");
       const description = data.get("task_description");
       const newTask = { title, status, dueDate, description };
       const response = await httpAddTask(newTask);
 
       if (response.ok) {
-        getTasks();
+        await getTasks();
       }
     },
     [getTasks]
   );
 
-  return { tasks, submitTask };
+  const updateTask = useCallback(
+    async (e) => {
+      const data = new FormData(e.target);
+      const id = data.get("task_id");
+      const title = data.get("task_title");
+      const dueDate = new Date(data.get("task_dueDate"));
+      const status = data.get("task_status");
+      const description = data.get("task_description");
+      const updatedTask = { id, title, dueDate, status, description };
+
+      console.log(dueDate);
+      const response = await httpUpdateTask(updatedTask);
+
+      if (response.ok) {
+        await getTasks();
+      }
+    },
+    [getTasks]
+  );
+
+  const deleteTask = useCallback(
+    async (e) => {
+      const id = e.target.dataset.id;
+      console.log(id);
+      //const response = await httpDeleteTask(id);
+
+      // if (response.ok) {
+      //   await getTasks();
+      // }
+    },
+    [getTasks]
+  );
+
+  return { tasks, submitTask, updateTask, deleteTask };
 }
