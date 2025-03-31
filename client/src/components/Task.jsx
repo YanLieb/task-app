@@ -5,10 +5,15 @@ import useTasks from "../hooks/useTasks";
 export default function Task(props) {
   const task = props.task;
   const [editEntry, setEditEntry] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const { deleteTask } = useTasks();
 
   function editMode() {
     setEditEntry(!editEntry);
+  }
+
+  function deleteAfterConfirm() {
+    setConfirmDelete(!confirmDelete);
   }
 
   function getLocalDateTimeString(date) {
@@ -98,13 +103,24 @@ export default function Task(props) {
         {!editEntry ? (
           <>
             <input type="button" onClick={editMode} value="Edit" />
-            <input
-              type="button"
-              className="task__update-delete"
-              value="Delete"
-              onClick={deleteTask}
-              data-id={task._id}
-            />
+
+            {!confirmDelete ? (
+              <input
+                type="button"
+                className="task__update-delete"
+                value="Delete"
+                onClick={deleteAfterConfirm}
+                data-id={task._id}
+              />
+            ) : (
+              <input
+                type="button"
+                className="task__update-delete"
+                value="Sure ?"
+                onClick={deleteTask}
+                data-id={task._id}
+              />
+            )}
           </>
         ) : (
           <>

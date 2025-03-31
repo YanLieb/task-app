@@ -1,15 +1,47 @@
 import "./NewTask.css";
+import { useState } from "react";
 
 export default function AddTaskForm(props) {
+  const [checkTitle, setCheckTitle] = useState(true);
+
+  const checkInput = (e) => {
+    const title = e.target.value;
+    if (title === "") {
+      setCheckTitle(false);
+    } else {
+      setCheckTitle(true);
+    }
+  };
+
+  const checkInputOnSubmit = (e) => {
+    const title = e.target.task_title.value;
+    if (title === "") {
+      setCheckTitle(false);
+      e.preventDefault();
+    }
+  };
+
+  const handleSubmit = (e) => {
+    checkInputOnSubmit(e);
+    props.submitTask(e);
+  };
+
   return (
     <>
       <h2>Add a task</h2>
-      <form onSubmit={props.submitTask}>
+      <form onSubmit={handleSubmit} className="task">
         <div className="form-group task__data task__data-title">
           <label className="task__title" htmlFor="task_title">
-            Title
+            Title*
           </label>
-          <input type="text" name="task_title" id="task_title" />
+          <input
+            type="text"
+            name="task_title"
+            id="task_title"
+            onBlur={checkInput}
+            onChange={checkInput}
+          />
+          {!checkTitle && <p className="task__error">Title is required</p>}
         </div>
         <div className="form-group task__data task__data-description">
           <label className="task__title" htmlFor="task_description">
@@ -39,7 +71,9 @@ export default function AddTaskForm(props) {
           <input type="datetime-local" id="task_dueDate" name="task_dueDate" />
         </div>
         <div className="form-group task__submit">
-          <button type="submit">Save task</button>
+          <button type="submit" disabled={!checkTitle && "disabled"}>
+            Save task
+          </button>
         </div>
       </form>
     </>

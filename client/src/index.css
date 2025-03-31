@@ -38,6 +38,17 @@ button:hover {
   box-shadow: 5px 5px 0 #066b85;
 }
 
+button:disabled {
+  background-color: #a8aaad;
+  color: #373737;
+  border: 2px solid #a8aaad;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  box-shadow: none;
+}
+
 input[type="button"]:hover {
   box-shadow: 5px 5px 0 #012326;
 }

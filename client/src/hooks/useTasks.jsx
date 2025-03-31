@@ -28,7 +28,9 @@ export default function useTasks() {
       e.preventDefault();
       const data = new FormData(e.target);
       const title = data.get("task_title");
-      const dueDate = new Date(data.get("task_dueDate"));
+      const dueDate = data.get("task_dueDate")
+        ? new Date(data.get("task_dueDate"))
+        : Date();
       const status = data.get("task_status");
       const description = data.get("task_description");
       const newTask = { title, status, dueDate, description };
@@ -46,9 +48,12 @@ export default function useTasks() {
       const data = new FormData(e.target);
       const id = data.get("task_id");
       const title = data.get("task_title");
-      const dueDate = new Date(data.get("task_dueDate"));
+      const dueDate = data.get("task_dueDate")
+        ? new Date(data.get("task_dueDate"))
+        : Date();
       const status = data.get("task_status");
       const description = data.get("task_description");
+
       const updatedTask = { id, title, dueDate, status, description };
 
       console.log(dueDate);
@@ -64,12 +69,12 @@ export default function useTasks() {
   const deleteTask = useCallback(
     async (e) => {
       const id = e.target.dataset.id;
-      console.log(id);
-      //const response = await httpDeleteTask(id);
+      const response = await httpDeleteTask(id);
 
-      // if (response.ok) {
-      //   await getTasks();
-      // }
+      if (response.ok) {
+        window.location.reload();
+        await getTasks();
+      }
     },
     [getTasks]
   );
